@@ -10,7 +10,6 @@ Class Produto extends Banco  {
 	protected $nome;
     protected $preco;
     protected $qtde;
-    protected $imagem;
     protected $categoria;
 
 
@@ -23,7 +22,6 @@ Class Produto extends Banco  {
         $this->nome = $dados[0] ?? null;
         $this->preco = $dados[1] ?? null;
         $this->qtde = $dados[2] ?? null;
-        $this->imagem = $dados[3] ?? null;
         $this->categoria = $dados[4] ?? null;
 
         return $this->inserir();
@@ -31,9 +29,9 @@ Class Produto extends Banco  {
     }
     public function inserir(){
 
-        $stmt = $this->dns->prepare('INSERT INTO produtos (nome, preco, qtde, imagem, categoria) VALUES (:nome, :preco, :qtde, :imagem, :categoria)');
+        $stmt = $this->dns->prepare('INSERT INTO produtos (nome, preco, qtde, categoria) VALUES (:nome, :preco, :qtde, :categoria)');
     
-            if( $stmt->execute([':nome' => $this->nome,':preco' => $this->preco,':qtde' => $this->qtde, ':imagem' => $this->imagem, ':categoria' => $this->categoria ])){
+            if( $stmt->execute([':nome' => $this->nome,':preco' => $this->preco,':qtde' => $this->qtde,  ':categoria' => $this->categoria ])){
     
                 return true;
             }
@@ -49,19 +47,16 @@ Class Produto extends Banco  {
   }
   public function apagar($id){
 
-     $this->dns->query("DELETE FROM produtos WHERE idProduto ='{$id}'");
-    
+    $stmt =$this->dns->query("DELETE FROM produtos WHERE idProduto ='{$id}'");
+     $stmt->execute();
   }
 
-  public function mostrar(){
+  public function getGeral()
+  {
 
-    $stmt = $this->dns->prepare('SELECT * FROM produtos');
-
-		$stmt->execute();
-
-		return $stmt->fetchAll();
+      $stmt = $this->dns->prepare("SELECT * FROM produtos ");
+      $stmt->execute();
+      $s = $stmt->fetchAll();
+      return $s;
   }
 }
-//$a->setDados(['teste',4.50,10,testeImagem,livro]);
-//$a->getId(12345678);
-//var_dump($a);

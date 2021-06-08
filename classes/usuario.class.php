@@ -18,7 +18,7 @@ Class Usuario extends Banco  {
 
 
 public function setDados(array $dados){
-    $this->nome = $dados[0] ?? null;
+    $this->nomec = $dados[0] ?? null;
 	$this->email = $dados[1] ?? null;
 	$this->senha = $dados[2] ?? null;
 
@@ -28,9 +28,9 @@ public function setDados(array $dados){
 }
 public function inserir(){
 
-    $stmt = $this->dns->prepare('INSERT INTO usuario (nomec, email,senha) VALUES (:nome, :email, :senha)');
+    $stmt = $this->dns->prepare('INSERT INTO usuario (nomec, email,senha) VALUES (:nomec, :email, :senha)');
 
-		if( $stmt->execute([':nome' => $this->nome,':email' => $this->email,':senha' => $this->senha ])){
+		if( $stmt->execute([':nomec' => $this->nomec,':email' => $this->email,':senha' => $this->senha ])){
 
 			return true;
 		}
@@ -44,10 +44,17 @@ public function getId($em, $se){
         $this->id=$s[0][0];
         
 }
+public function getGeral(){
+          
+    $stmt = $this->dns->prepare("SELECT * FROM usuario ");
+    $stmt->execute();
+    $s=$stmt->fetchAll();
+    return $s;
+}
+public function apagar($id){
+
+    $stmt = $this->dns->query("DELETE FROM usuario WHERE idusuario ='{$id}'");
+    $stmt->execute();
+ }
 
 }
-$a = new Usuario;
-
-//$a->setDados(['teste','teste@teste',1234567]);
-//$a->getId(12345678);
-//var_dump($a);

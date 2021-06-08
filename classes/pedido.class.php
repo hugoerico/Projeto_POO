@@ -1,10 +1,9 @@
 <?php
-class Pedido extends Banco
-{
-
+Class Pedido extends Banco  {
+    
     protected $idproduto;
-    protected $idcliente;
-
+	protected $idcliente;
+	
 
     public function __construct()
     {
@@ -12,39 +11,35 @@ class Pedido extends Banco
     }
 
 
-    public function setDados(array $dados)
-    {
-        $this->idproduto = $dados[0] ?? null;
-        $this->idcliente = $dados[1] ?? null;
+public function setDados(array $dados){
+    $this->idproduto = $dados[0] ?? null;
+	$this->idcliente = $dados[1] ?? null;
 
-        return $this->inserir();
-    }
-    public function inserir()
-    {
-
-        $stmt = $this->dns->prepare('INSERT INTO pedido (idproduto, idcliente) VALUES (:idproduto, :idcliente)');
-
-        if ($stmt->execute([':idproduto' => $this->idproduto, ':idcliente' => $this->idcliente])) {
-
-            return true;
-        }
-    }
+	return $this->inserir();
+   
+         
 }
+public function inserir(){
 
-class MostrarID extends Pedido{
+    $stmt = $this->dns->prepare('INSERT INTO pedido (idproduto, idcliente) VALUES (:idproduto, :idcliente)');
 
-    public function mostrar($id)
-    {
+		if( $stmt->execute([':idproduto' => $this->idproduto,':idcliente' => $this->idcliente])){
 
-        $stmt = $this->dns->prepare("SELECT * FROM pedido WHERE idcliente = '{$id}'");
+			return true;
+		}
+}
+public function mostrar($id){
 
-        $stmt->execute();
+    $stmt = $this->dns->prepare("SELECT * FROM pedido WHERE idcliente = '{$id}'");
 
-        return $stmt->fetchAll();
-    }
-    public function apagar($id)
-    {
+		$stmt->execute();
 
-        $this->dns->query("DELETE FROM pedido WHERE idcliente ='{$id}'");
-    }
+		return $stmt->fetchAll();
+  }
+public function apagar($id){
+
+    $this->dns->query("DELETE FROM pedido WHERE idcliente ='{$id}'");
+   
+ }
+
 }
